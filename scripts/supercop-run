@@ -1,0 +1,14 @@
+#!/bin/bash
+
+run=$1
+version=20200906
+where="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
+top=$where/../
+
+if [ "$#" -eq 0 ]; then
+ echo "supercop-patch needs 1 argument: 'run1' or 'run2' for instance.";
+ exit
+fi
+
+cd $top/$run-supercop-$version/
+nohup sh do &

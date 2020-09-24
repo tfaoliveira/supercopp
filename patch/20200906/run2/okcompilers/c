@@ -1,0 +1,8 @@
+gcc -march=native -mtune=native -O3 -fomit-frame-pointer -fwrapv -fPIC -fPIE
+ccomp-3.7 -I /usr/local/lib/compcert/ccomp-3.7/include/ -stdlib /usr/local/lib/compcert/ccomp-3.7/
+gcc -m32 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -maes -mpclmul -O3 -fomit-frame-pointer -fwrapv -fPIC -fPIE
+gcc -m32 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -maes -mpclmul -O2 -fomit-frame-pointer -fwrapv -fPIC -fPIE
+gcc -m32 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -maes -mpclmul -O1 -fomit-frame-pointer -fwrapv -fPIC -fPIE
+gcc -m32 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -maes -mpclmul -O0 -fomit-frame-pointer -fwrapv -fPIC -fPIE
+ccomp-2.2 -stdlib /usr/local/lib/compcert/ccomp-2.2/
+ccomp-2.2-simd -mmmx -msse -msse2 -msse3 -mssse3 -msse41 -msse42 -maes -mpclmul -I /usr/local/include/compcert/ccomp-2.2-simd/ -stdlib /usr/local/lib/compcert/ccomp-2.2-simd/

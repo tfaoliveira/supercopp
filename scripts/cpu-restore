@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# This script was tested in the following env:
+# - Intel(R) Core(TM) i5-7260U CPU
+# - Ubuntu 20.04 LTS
+# - needs adjustment depending on OS/CPU model
+
+# Enable all CPU's (just 1 and 3 for now)
+seq 1 3 | \
+while read cpuid; do \
+ echo "Enabling CPU $cpuid"; \
+ echo 1 > /sys/devices/system/cpu/cpu$cpuid/online; \
+done
+
+# Is acpi-cpufreq being used?
+drv=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver`
+if [ $drv == "acpi-cpufreq" ]; then
+
+  # Turn on boost
+  echo "Enabling boost"; \
+  echo 1 > /sys/devices/system/cpu/cpufreq/boost
+
+  # Set frequency
+  seq 0 3 | \
+  while read cpuid; do \
+    echo "Setting CPU $cpuid: performance"; \
+    echo performance > /sys/devices/system/cpu/cpu$cpuid/cpufreq/scaling_governor; \
+  done
+
+# if not check if intel_pstate is being used
+elif [ $drv == "intel_pstate" ]; then
+
+  # Turn on turbo-boost
+  echo "Enabling Turbo Boost"; \
+  echo 0 > /sys/devices/system/cpu/intel_pstate/no_turbo
+
+fi
+

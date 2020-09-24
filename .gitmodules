@@ -1,0 +1,6 @@
+[submodule "third_party/compcert/compcert_v3.7"]
+	path = third_party/compcert/compcert_v3.7
+	url = https://github.com/AbsInt/CompCert.git
+[submodule "third_party/compcert/compcert_v2.2/compcert_v2.2_simd"]
+	path = third_party/compcert/compcert_v2.2/ccomp-simd
+	url = https://github.com/haslab/ccomp-simd.git

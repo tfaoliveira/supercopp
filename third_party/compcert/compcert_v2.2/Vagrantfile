@@ -1,0 +1,58 @@
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "ubuntu/focal64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "3096"
+  end
+
+  config.vm.synced_folder "../../../", "/home/vagrant/supercopp"
+
+  config.vm.provision "install", type: "shell", binary: true, inline: <<-SHELL
+    echo "running install as: `whoami`"
+    sudo apt-get update
+    sudo apt install -y git build-essential m4 libssl-dev gpp gnuplot unzip bubblewrap
+  SHELL
+
+  config.vm.provision "opam", type: "shell", binary: true, privileged: false, inline: <<-SHELL
+    echo "running opam as: `whoami`"
+    wget https://github.com/ocaml/opam/releases/download/2.0.7/opam-2.0.7-x86_64-linux
+    sudo cp opam-2.0.7-x86_64-linux /usr/local/bin/opam
+    sudo chmod a+x /usr/local/bin/opam
+    opam init -y
+    echo "#opam configuration" >> ~/.profile
+    echo "test -r /home/vagrant/.opam/opam-init/init.sh && . /home/vagrant/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true" >> ~/.profile
+    source ~/.profile
+    opam update
+    opam install -y opam-depext
+  SHELL
+
+  config.vm.provision "compcert", type: "shell", binary: true, privileged: false, inline: <<-SHELL
+    echo "running depend as: `whoami`"
+    opam switch create 4.02.3
+    opam install -y coq.8.4.6
+    opam install -y menhir.20171222
+    opam repo add coq-released https://coq.inria.fr/opam/released
+    opam install -y coq-mathcomp-algebra.1.6.1
+    eval $(opam env)
+
+    (cd /home/vagrant/supercopp/third_party/compcert/compcert_v2.2/ &&
+     wget http://compcert.inria.fr/release/compcert-2.2.tgz &&
+     tar xvzf compcert-2.2.tgz &&
+     cd /home/vagrant/supercopp/third_party/compcert/compcert_v2.2/compcert-2.2 &&
+     ./configure ia32-linux -libdir /usr/local/lib/compcert/ccomp-2.2/ &&
+     make)
+
+    git clone https://github.com/coq-contribs/containers.git --branch v8.4 --single-branch
+    (cd containers; make; make install; cd ..; rm -rf containers)
+
+    (cd /home/vagrant/supercopp/third_party/compcert/compcert_v2.2/ccomp-simd &&
+     tar xvzf ../compcert-2.2.tgz &&
+     make clean_setup_build_dir &&
+     cd build &&
+     ./configure ia32-linux -libdir /usr/local/lib/compcert/ccomp-2.2-simd/ &&
+     make depend &&
+     make)
+
+  SHELL
+end

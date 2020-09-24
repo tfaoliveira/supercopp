@@ -1,0 +1,2 @@
+g++ -march=native -mtune=native -O3 -fomit-frame-pointer -fwrapv -fPIC -fPIE
+g++ -m32 -O3 -fomit-frame-pointer -fwrapv -fPIC -fPIE

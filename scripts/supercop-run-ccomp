@@ -1,0 +1,35 @@
+#!/bin/bash
+
+run=$1
+version=20200906
+where="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
+top=$where/..
+
+if [ "$#" -eq 0 ]; then
+ echo "supercop-patch-run-ccomp needs 1 argument: 'run1' or 'run2' for instance.";
+ exit
+fi
+
+if [ -d $run-supercop-$version ]; then
+ echo "$run-supercop-$version already exists."
+ exit
+fi
+
+unxz < supercop-$version.tar.xz | tar -xf -
+mv supercop-$version $run-supercop-$version
+
+cp $top/patch/$version/do-part $top/$run-supercop-$version/do-part
+cp $top/patch/$version/$run/p1/okcompilers/* $top/$run-supercop-$version/okcompilers
+
+cd $run-supercop-$version
+sh do-part init
+sh do-part gmp
+sh do-part ntl
+sh do-part keccak
+sh do-part cryptopp
+
+cp $top/patch/$version/$run/p2/okcompilers/* $top/$run-supercop-$version/okcompilers
+
+sh do-part okcompilers
+sh do-part inttypes
+nohup sh do-part operations &

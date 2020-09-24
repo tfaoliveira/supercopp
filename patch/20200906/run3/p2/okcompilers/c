@@ -1,0 +1,1 @@
+ccomp-2.2-simd -mmmx -msse -msse2 -msse3 -mssse3 -msse41 -msse42 -maes -mpclmul -I /usr/local/include/compcert/ccomp-2.2-simd/ -stdlib /usr/local/lib/compcert/ccomp-2.2-simd/
