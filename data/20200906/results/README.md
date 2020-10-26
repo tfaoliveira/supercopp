@@ -12,6 +12,8 @@ This section presents an overview of the different types of implementations that
 * c: implementation doesn't contain any .cpp .hpp .s .S files in it
 * cpp: implementations doesn't contain any .c .s .S files 
 
+|operation|total|asm|
+|--------------------|----|----|
 |crypto_verify|15|0|
 |crypto_decode|48|0|
 |crypto_encode|48|0|
