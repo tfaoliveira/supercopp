@@ -33,6 +33,44 @@ focus="$1"
 pfocus="$2"
 opfocus=${focus}_${pfocus}
 
+###############################################################################
+sfocus=""
+libpath=""
+liblink=""
+lstlink=""
+
+if [ "$#" -eq 3 ]; then
+  sfocus="/$3";
+fi
+
+if [ "$#" -eq 4 ]; then
+  sfocus="/$3";
+  lstlink="$4";
+fi
+
+if [ "$#" -eq 5 ]; then
+  sfocus="/$3";
+  libpath="$4";
+  liblink="$5";
+fi
+
+if [ "$#" -eq 6 ]; then
+  sfocus="/$3";
+  libpath="$4";
+  liblink="$5";
+  lstlink="$6";
+fi
+
+echo ">>>>$focus"
+echo ">>>>$pfocus"
+echo ">>>>$opfocus"
+echo ">>>>$sfocus"
+echo ">>>>$libpath"
+echo ">>>>$liblink"
+echo ">>>>$lstlink"
+###############################################################################
+
+
 version=`cat version`
 project=supercop
 shorthostname=`hostname | sed 's/\..*//' | tr -cd '[a-z][A-Z][0-9]' | tr '[A-Z]' '[a-z]'`
@@ -415,9 +453,10 @@ do
 
         #####################################################################
         log_time "BEGIN" "SECURITY" "$o, $p, $abi, $security" sbt
-        #####################################################################
 
-        find "$o/$p" -follow -name "api.h" \
+        #find "$o/$p" -follow -name "api.h" \
+        find "$o/$p${sfocus}" -follow -name "api.h" \
+        #####################################################################
         | sort \
         | while read doth
         do
